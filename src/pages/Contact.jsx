@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Mail, Phone, Clock, MessageSquare, ChevronDown } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (!formData.firstName || !formData.email || !formData.message) {
@@ -37,43 +38,37 @@ const Contact = () => {
     
     setStatus({ submitting: true, success: false, error: null });
     
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/info@lgtechh.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          service: formData.service,
-          message: formData.message,
-          _subject: `New LG Tech Contact Form Inquiry from ${formData.firstName} ${formData.lastName}`
-        })
+    const templateParams = {
+      name: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.company,
+      service: formData.service,
+      message: formData.message,
+      title: `${formData.firstName} ${formData.lastName}`
+    };
+
+    emailjs.send(
+      'service_pdgvxt8',
+      'template_l0pno3v',
+      templateParams,
+      'PGdK3HUY7TnKJnUxO'
+    )
+    .then(() => {
+      setStatus({ submitting: false, success: true, error: null });
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        company: '',
+        service: 'Custom Software Development',
+        message: ''
       });
-      
-      const result = await response.json();
-      
-      if (response.ok || result.success === "true") {
-        setStatus({ submitting: false, success: true, error: null });
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          company: '',
-          service: 'Custom Software Development',
-          message: ''
-        });
-      } else {
-        throw new Error(result.message || 'Something went wrong. Please try again.');
-      }
-    } catch (err) {
-      setStatus({ submitting: false, success: false, error: err.message || 'Failed to send message. Please try again later.' });
-    }
+    })
+    .catch((err) => {
+      setStatus({ submitting: false, success: false, error: err.text || 'Failed to send message. Please try again later.' });
+    });
   };
 
   return (
