@@ -45,12 +45,12 @@ const Contact = () => {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          Name: `${formData.firstName} ${formData.lastName}`,
-          Email: formData.email,
-          Phone: formData.phone,
-          Company: formData.company,
-          Service: formData.service,
-          Message: formData.message,
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          service: formData.service,
+          message: formData.message,
           _subject: `New LG Tech Contact Form Inquiry from ${formData.firstName} ${formData.lastName}`
         })
       });
