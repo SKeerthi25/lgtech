@@ -1,8 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Mail, Phone, Clock, MessageSquare, ChevronDown } from 'lucide-react';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    company: '',
+    service: 'Custom Software Development',
+    message: ''
+  });
+
+  const [status, setStatus] = useState({
+    submitting: false,
+    success: false,
+    error: null
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.email || !formData.message) {
+      setStatus({ submitting: false, success: false, error: 'Please fill in all required fields (First Name, Business Email, and Project Details).' });
+      return;
+    }
+    
+    setStatus({ submitting: true, success: false, error: null });
+    
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/nandhauk1947@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          Name: `${formData.firstName} ${formData.lastName}`,
+          Email: formData.email,
+          Phone: formData.phone,
+          Company: formData.company,
+          Service: formData.service,
+          Message: formData.message,
+          _subject: `New LG Tech Contact Form Inquiry from ${formData.firstName} ${formData.lastName}`
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok || result.success === "true") {
+        setStatus({ submitting: false, success: true, error: null });
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          company: '',
+          service: 'Custom Software Development',
+          message: ''
+        });
+      } else {
+        throw new Error(result.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setStatus({ submitting: false, success: false, error: err.message || 'Failed to send message. Please try again later.' });
+    }
+  };
+
   return (
     <div>
       <section className="hero" style={{ minHeight: '50vh', paddingTop: '120px' }}>
@@ -93,53 +166,65 @@ const Contact = () => {
               style={{ padding: '3rem', borderRadius: '12px', boxShadow: 'var(--shadow-xl)' }}
             >
               <h3 style={{ fontSize: '1.8rem', marginBottom: '2rem' }}>Send an Inquiry</h3>
-              <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              
+              {status.success && (
+                <div style={{ padding: '1rem', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10B981', color: '#10B981', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
+                  <strong>Message Sent Successfully!</strong> We have received your inquiry and will reach out to you shortly.
+                </div>
+              )}
+              {status.error && (
+                <div style={{ padding: '1rem', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #EF4444', color: '#EF4444', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
+                  {status.error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div className="grid grid-cols-2" style={{ gap: '1.5rem' }}>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>First Name</label>
-                    <input type="text" placeholder="John" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>First Name <span style={{ color: 'var(--primary)' }}>*</span></label>
+                    <input name="firstName" value={formData.firstName} onChange={handleChange} type="text" placeholder="John" required style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Last Name</label>
-                    <input type="text" placeholder="Doe" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <input name="lastName" value={formData.lastName} onChange={handleChange} type="text" placeholder="Doe" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2" style={{ gap: '1.5rem' }}>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Business Email</label>
-                    <input type="email" placeholder="john@company.com" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Business Email <span style={{ color: 'var(--primary)' }}>*</span></label>
+                    <input name="email" value={formData.email} onChange={handleChange} type="email" placeholder="john@company.com" required style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Phone Number</label>
-                    <input type="tel" placeholder="07884..." style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <input name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="07884..." style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-2" style={{ gap: '1.5rem' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Company Name</label>
-                    <input type="text" placeholder="Your Enterprise" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <input name="company" value={formData.company} onChange={handleChange} type="text" placeholder="Your Enterprise" style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Service Interest</label>
-                    <select style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }}>
-                      <option>Custom Software Development</option>
-                      <option>Cloud Migration & Architecture</option>
-                      <option>AI & Data Analytics</option>
-                      <option>Enterprise IT Consulting</option>
-                      <option>Other Services</option>
+                    <select name="service" value={formData.service} onChange={handleChange} style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }}>
+                      <option value="Custom Software Development">Custom Software Development</option>
+                      <option value="Cloud Migration & Architecture">Cloud Migration & Architecture</option>
+                      <option value="AI & Data Analytics">AI & Data Analytics</option>
+                      <option value="Enterprise IT Consulting">Enterprise IT Consulting</option>
+                      <option value="Other Services">Other Services</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Project Details</label>
-                  <textarea rows="4" placeholder="Tell us about your project requirements..." style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit', resize: 'vertical' }}></textarea>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Project Details <span style={{ color: 'var(--primary)' }}>*</span></label>
+                  <textarea name="message" value={formData.message} onChange={handleChange} rows="4" placeholder="Tell us about your project requirements..." required style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit', resize: 'vertical' }}></textarea>
                 </div>
 
-                <button type="button" className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
-                  <MessageSquare size={20} /> Submit Inquiry
+                <button type="submit" disabled={status.submitting} className="btn btn-primary" style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', cursor: status.submitting ? 'not-allowed' : 'pointer', opacity: status.submitting ? 0.7 : 1 }}>
+                  <MessageSquare size={20} /> {status.submitting ? 'Sending...' : 'Submit Inquiry'}
                 </button>
               </form>
             </motion.div>
