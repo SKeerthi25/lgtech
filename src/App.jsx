@@ -155,7 +155,7 @@ const Footer = () => {
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Mail size={20} className="text-primary" />
-                <span>nandhauk1947@gmail.com</span>
+                <span>info@lgtechh.com</span>
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Phone size={20} className="text-primary" />

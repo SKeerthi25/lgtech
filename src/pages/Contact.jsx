@@ -38,7 +38,7 @@ const Contact = () => {
     setStatus({ submitting: true, success: false, error: null });
     
     try {
-      const response = await fetch('https://formsubmit.co/ajax/nandhauk1947@gmail.com', {
+      const response = await fetch('https://formsubmit.co/ajax/info@lgtechh.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>Email Us</h4>
-                    <p className="text-muted">nandhauk1947@gmail.com<br />www.lgtech.com</p>
+                    <p className="text-muted">info@lgtechh.com<br />www.lgtech.com</p>
                   </div>
                 </div>
 
