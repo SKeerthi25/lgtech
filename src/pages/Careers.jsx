@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 
 const Careers = () => {
   const jobs = [
@@ -68,9 +70,9 @@ const Careers = () => {
                   </div>
                 </div>
                 <div>
-                  <button className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Link to="/contact" className="btn btn-primary" style={{ padding: '0.75rem 1.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
                     Apply Now <ChevronRight size={16} />
-                  </button>
+                  </Link>
                 </div>
               </motion.div>
             ))}
