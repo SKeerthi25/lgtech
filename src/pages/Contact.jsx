@@ -137,7 +137,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>Call Us</h4>
-                    <p className="text-muted">07884379931</p>
+                    <p className="text-muted">+447884379931</p>
                   </div>
                 </div>
                 
@@ -147,7 +147,11 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>Business Hours</h4>
-                    <p className="text-muted">Monday - Friday: 9:00 AM - 6:00 PM (GMT)<br />Support: 24/7/365</p>
+                    <p className="text-muted">
+                      Monday - Friday: 09:00 - 18:00 (GMT)<br />
+                      Saturday - Sunday: 10:00 - 16:00 (GMT)<br />
+                      Support: 24/7/365
+                    </p>
                   </div>
                 </div>
               </div>
@@ -192,7 +196,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>Phone Number</label>
-                    <input name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="07884..." style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
+                    <input name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="+447884..." style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-color)', fontFamily: 'inherit' }} />
                   </div>
                 </div>
                 
